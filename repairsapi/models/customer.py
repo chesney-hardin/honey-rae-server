@@ -12,3 +12,4 @@ class Customer(models.Model):
     @property
     def full_name(self):
         return f'{self.user.first_name} {self.user.last_name}'
+    
