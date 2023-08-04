@@ -55,6 +55,28 @@ class TicketView(ViewSet):
         ticket = ServiceTicket.objects.get(pk=pk)
         serialized = TicketSerializer(ticket, context={'request': request})
         return Response(serialized.data, status=status.HTTP_200_OK)
+    
+    def update(self, request, pk=None):
+        """Handle PUT requests fo assigning employee to ticket"""
+
+        ticket = ServiceTicket.objects.get(pk=pk)
+
+        # get the employee id from client request
+        employee_id = request.data['employee']
+
+        assigned_employee = Employee.objects.get(pk=employee_id)
+
+        ticket.employee = assigned_employee
+
+        ticket.save()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+    def destroy(self, request, pk=None):
+        """Handle DELETE requests for service tickets"""
+        ticket = ServiceTicket.objects.get(pk=pk)
+        ticket.delete()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
 
 class TicketEmployeeSerializer(serializers.ModelSerializer):
 
